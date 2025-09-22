@@ -126,6 +126,62 @@ button:hover {
 
   <button id="open-history">Abrir Historial</button>
 
+
+
+<html>
+<head>
+  <title>Historial del Chat</title>
+  <style>
+    #history-log {
+      border: 1px solid #ccc;
+      padding: 10px;
+      height: 300px;
+      overflow-y: scroll;
+    }
+  </style>
+</head>
+<body>
+  <h1>Historial del Chat</h1>
+  <div id="history-log"></div>
+
+  <script>
+    // history.js (script para la ventana secundaria)
+
+    const historyLog = document.getElementById('history-log');
+
+    function loadHistory() {
+      const savedHistory = localStorage.getItem('chatHistory');
+      if (savedHistory) {
+        historyLog.innerHTML = savedHistory;
+        historyLog.scrollTop = historyLog.scrollHeight; // Scroll al final
+      } else {
+        historyLog.textContent = 'No hay historial guardado.';
+      }
+    }
+
+    // Cargar el historial al cargar la página
+    loadHistory();
+
+
+    // Opcional:  Si quieres que se actualice si la ventana principal cambia (usando Broadcast Channel)
+    
+    const channel = new BroadcastChannel('chat-channel');
+
+    channel.addEventListener('message', event => {
+      if (event.data === 'chat-updated') {
+        loadHistory();
+      }
+    });
+   /////////OPCION ESTA PARTE DE ARRIBA 
+
+
+
+  </script>
+</body>
+</html>
+
+  
+
   <script>
     // script.js (modificado)
 
@@ -189,7 +245,11 @@ button:hover {
   </script>
 </body>
 </html>
+
+
+<!--
 **Archivo `history.html` (para la ventana secundaria)** Este archivo es muy simple. Solo se encarga de mostrar el contenido que se guardó en `localStorage`.
+
 <!DOCTYPE html>
 <html>
 <head>
